@@ -2,6 +2,7 @@ using LibraryManagementApi.Services;
 using LibraryManagementApi.Data;
 using Microsoft.EntityFrameworkCore;
 using LibraryManagementApi.Repositories;
+using LibraryManagementApi.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IBookService, BookService>();
@@ -25,6 +26,8 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

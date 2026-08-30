@@ -81,4 +81,14 @@ public class BooksController : ControllerBase
 
         return NoContent();
     }
+
+
+// it's was just for learning purpose 
+
+
+ //   [HttpGet("test-error")]
+// public IActionResult TestError()
+ // {
+// throw new Exception("This is a test exception.");
+// }
 }
