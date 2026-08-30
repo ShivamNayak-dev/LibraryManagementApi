@@ -15,16 +15,20 @@ public class BooksController : ControllerBase
         _bookService = bookService;
     }
 
+    // GET: api/books
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(_bookService.GetAll());
+        var books = await _bookService.GetAllAsync();
+
+        return Ok(books);
     }
 
+    // GET: api/books/{id}
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var book = _bookService.GetById(id);
+        var book = await _bookService.GetByIdAsync(id);
 
         if (book is null)
         {
@@ -34,10 +38,11 @@ public class BooksController : ControllerBase
         return Ok(book);
     }
 
+    // POST: api/books
     [HttpPost]
-    public IActionResult Create(CreateBookRequest request)
+    public async Task<IActionResult> Create(CreateBookRequest request)
     {
-        var createdBook = _bookService.Add(request);
+        var createdBook = await _bookService.AddAsync(request);
 
         return Created(
             $"/api/books/{createdBook.Id}",
@@ -45,23 +50,29 @@ public class BooksController : ControllerBase
         );
     }
 
+    // PUT: api/books/{id}
     [HttpPut("{id}")]
-    public IActionResult Update(int id, UpdateBookRequest request)
+    public async Task<IActionResult> Update(
+        int id,
+        UpdateBookRequest request)
     {
-        var updated = _bookService.Update(id, request);
+        var updated = await _bookService.UpdateAsync(id, request);
 
         if (!updated)
         {
             return NotFound();
         }
 
-        return Ok(_bookService.GetById(id));
+        var updatedBook = await _bookService.GetByIdAsync(id);
+
+        return Ok(updatedBook);
     }
 
+    // DELETE: api/books/{id}
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var deleted = _bookService.Delete(id);
+        var deleted = await _bookService.DeleteAsync(id);
 
         if (!deleted)
         {

@@ -13,21 +13,21 @@ public class BookService : IBookService
         _bookRepository = bookRepository;
     }
 
-    public List<BookResponse> GetAll()
+    public async Task<List<BookResponse>> GetAllAsync()
     {
-        var books = _bookRepository.GetAll();
+        var books = await _bookRepository.GetAllAsync();
 
         return books.Select(ToResponse).ToList();
     }
 
-    public BookResponse? GetById(int id)
+    public async Task<BookResponse?> GetByIdAsync(int id)
     {
-        var book = _bookRepository.GetById(id);
+        var book = await _bookRepository.GetByIdAsync(id);
 
         return book is null ? null : ToResponse(book);
     }
 
-    public BookResponse Add(CreateBookRequest request)
+    public async Task<BookResponse> AddAsync(CreateBookRequest request)
     {
         var book = new Book
         {
@@ -38,14 +38,16 @@ public class BookService : IBookService
             AvailableCopies = request.AvailableCopies
         };
 
-        var createdBook = _bookRepository.Add(book);
+        var createdBook = await _bookRepository.AddAsync(book);
 
         return ToResponse(createdBook);
     }
 
-    public bool Update(int id, UpdateBookRequest request)
+    public async Task<bool> UpdateAsync(
+        int id,
+        UpdateBookRequest request)
     {
-        var book = _bookRepository.GetById(id);
+        var book = await _bookRepository.GetByIdAsync(id);
 
         if (book is null)
         {
@@ -58,19 +60,19 @@ public class BookService : IBookService
         book.Price = request.Price;
         book.AvailableCopies = request.AvailableCopies;
 
-        return _bookRepository.Update(book);
+        return await _bookRepository.UpdateAsync(book);
     }
 
-    public bool Delete(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        var book = _bookRepository.GetById(id);
+        var book = await _bookRepository.GetByIdAsync(id);
 
         if (book is null)
         {
             return false;
         }
 
-        return _bookRepository.Delete(book);
+        return await _bookRepository.DeleteAsync(book);
     }
 
     private static BookResponse ToResponse(Book book)

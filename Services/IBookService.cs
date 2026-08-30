@@ -4,13 +4,13 @@ namespace LibraryManagementApi.Services;
 
 public interface IBookService
 {
-    List<BookResponse> GetAll();
+    Task<List<BookResponse>> GetAllAsync();
 
-    BookResponse? GetById(int id);
+    Task<BookResponse?> GetByIdAsync(int id);
 
-    BookResponse Add(CreateBookRequest request);
+    Task<BookResponse> AddAsync(CreateBookRequest request);
 
-    bool Update(int id, UpdateBookRequest request);
+    Task<bool> UpdateAsync(int id, UpdateBookRequest request);
 
-    bool Delete(int id);
+    Task<bool> DeleteAsync(int id);
 }
